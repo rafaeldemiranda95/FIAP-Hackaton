@@ -35,18 +35,25 @@ class AuthController extends Controller
 
     public function register(Request $request, UserService $userService)
     {
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8|confirmed',
-        ]);
+        try {
+            $validatedData = $request->validate([
+                'name' => 'required|string|max:255',
+                'email' => 'required|string|email|max:255|unique:users',
+                'password' => 'required|string|min:8|confirmed',
+            ]);
 
-        $result = $userService->register($request->all());
+            $result = $userService->register($request->all());
 
-        if (isset($result['error'])) {
-            return response()->json(['message' => $result['error']], $result['status']);
+            if (isset($result['error'])) {
+                return response()->json(['message' => $result['error']], $result['status']);
+            }
+
+            return response()->json(['message' => 'User successfully registered', 'user' => $result['user']], $result['status']);
+        } catch (\Exception $e) {
+            // Resposta em caso de erro
+            return response()->json([
+                'mensagem' => 'Erro ao registrar usuário: ' . $e->getMessage(),
+            ], 500);
         }
-
-        return response()->json(['message' => 'User successfully registered', 'user' => $result['user']], $result['status']);
     }
 }

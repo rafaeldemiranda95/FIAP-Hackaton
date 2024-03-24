@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\AutorizaAlteracaoController;
 use App\Http\Controllers\PontoController;
 
 
@@ -39,5 +40,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/registros', [PontoController::class, 'visualizarRegistros']);
         Route::post('/registro', [PontoController::class, 'registrar']);
         Route::get('/relatorio', [PontoController::class, 'gerarRelatorio']);
+        Route::put('/alterar/{id}', [PontoController::class, 'alterarRegistro']);
+        Route::post('/autorizacao/solicitar', [AutorizaAlteracaoController::class, 'solicitarAlteracao']);
+        Route::put('/autorizacao/autorizar/{id}', [AutorizaAlteracaoController::class, 'autorizaAlteracao']);
     });
 });

@@ -11,7 +11,7 @@ class UserService implements UserServiceInterface
 {
     protected $userRepository;
 
-    public function __construct(UserRepository $userRepository)
+    public function __construct(UserRepositoryInterface $userRepository)
     {
         $this->userRepository = $userRepository;
     }
@@ -20,8 +20,8 @@ class UserService implements UserServiceInterface
     {
         $existingUser = $this->userRepository->findByEmail($data['email']);
 
-        if ($existingUser) {
-            return ['error' => 'User already exists', 'status' => 409];
+        if (count($existingUser) > 0) {
+            return ['error' => 'User already exists: ', 'status' => 409];
         }
 
         $data['password'] = Hash::make($data['password']);

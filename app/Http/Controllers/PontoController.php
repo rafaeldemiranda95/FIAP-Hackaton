@@ -67,4 +67,36 @@ class PontoController extends Controller
 
         return response()->json($relatorio);
     }
+
+    public function alterarRegistro(Request $request, $id)
+    {
+        try {
+            // Validação dos dados da requisição
+            $validatedData = $request->validate([
+                'tipo' => 'required|in:entrada,intervalo_inicio,intervalo_fim,saida',
+                'data' => 'required|date',
+                'hora' => 'required|date_format:H:i'
+            ]);
+
+            // Preparação dos dados para registro
+            $data = [
+                'tipo' => $validatedData['tipo'],
+                'data' => $validatedData['data'],
+                'hora' => $validatedData['hora'],
+            ];
+
+            // Tentativa de registrar o ponto utilizando o serviço
+            $ponto = $this->pontoService->alterar($data, $id);
+
+            // Resposta em caso de sucesso
+            return response()->json([
+                'mensagem' => $ponto, // 'Registro alterado com sucesso',
+            ], 200);
+        } catch (\Exception $e) {
+            // Resposta em caso de erro
+            return response()->json([
+                'mensagem' => 'Erro ao alterar o ponto: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
 }

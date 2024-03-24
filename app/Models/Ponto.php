@@ -20,4 +20,9 @@ class Ponto extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
+    public function autorizacoes()
+    {
+        return $this->hasMany(AutorizaAlteracao::class, 'dia');
+    }
 }

@@ -10,7 +10,7 @@ class UserRepository implements UserRepositoryInterface
 {
     public function findByEmail($email)
     {
-        return User::where('email', $email)->firstOrFail();
+        return User::where('email', $email)->get();
     }
 
     public function create(array $data)
