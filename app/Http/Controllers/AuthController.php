@@ -17,19 +17,20 @@ class AuthController extends Controller
     }
 
     public function login(Request $request)
-    { $request->validate([
-        'email' => 'required|string|email',
-        'password' => 'required|string',
-    ]);
+    {
+        $request->validate([
+            'email' => 'required|string|email',
+            'password' => 'required|string',
+        ]);
 
-    if (!Auth::attempt($request->only('email', 'password'))) {
-        return response()->json(['message' => 'Unauthorized'], 401);
-    }
+        if (!Auth::attempt($request->only('email', 'password'))) {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
 
-    $user = Auth::user();
-    $token = $user->createToken('authToken')->plainTextToken;
+        $user = Auth::user();
+        $token = $user->createToken('authToken')->plainTextToken;
 
-    return response()->json(['token' => $token], 200);
+        return response()->json(['token' => $token], 200);
     }
 
     public function register(Request $request, UserService $userService)
@@ -39,14 +40,13 @@ class AuthController extends Controller
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
         ]);
-    
+
         $result = $userService->register($request->all());
-    
+
         if (isset($result['error'])) {
             return response()->json(['message' => $result['error']], $result['status']);
         }
-    
+
         return response()->json(['message' => 'User successfully registered', 'user' => $result['user']], $result['status']);
     }
-    
 }

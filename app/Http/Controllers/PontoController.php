@@ -1,35 +1,48 @@
-<?php 
+<?php
 
 namespace App\Http\Controllers;
 
 use App\Interfaces\PontoServiceInterface;
+use App\Services\PontoService;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+
 class PontoController extends Controller
 {
     protected $pontoService;
 
-    public function __construct(PontoServiceInterface $pontoService)
+    public function __construct(PontoService $pontoService)
     {
         $this->pontoService = $pontoService;
     }
 
     public function registrar(Request $request)
     {
-        $request->validate([
-            'tipo' => 'required|in:entrada,intervalo_inicio,intervalo_fim,saida',
-        ]);
+        try {
+            // Validação dos dados da requisição
+            $validatedData = $request->validate([
+                'tipo' => 'required|in:entrada,intervalo_inicio,intervalo_fim,saida',
+            ]);
 
-        $data = [
-            'tipo' => $request->tipo,
-            'user_id' => auth()->user()->id, 
-        ];
+            // Preparação dos dados para registro
+            $data = [
+                'tipo' => $validatedData['tipo'],
+                'user_id' => auth()->user()->id,
+            ];
 
-        $this->pontoService->registrar($data);
+            // Tentativa de registrar o ponto utilizando o serviço
+            $this->pontoService->registrar($data);
 
-        return response()->json([
-            'mensagem' => 'Registro efetuado com sucesso',
-        ], 200);
+            // Resposta em caso de sucesso
+            return response()->json([
+                'mensagem' => 'Registro efetuado com sucesso',
+            ], 200);
+        } catch (\Exception $e) {
+            // Resposta em caso de erro
+            return response()->json([
+                'mensagem' => 'Erro ao registrar o ponto: ' . $e->getMessage(),
+            ], 500);
+        }
     }
 
 

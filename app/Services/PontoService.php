@@ -1,17 +1,19 @@
-<?php 
+<?php
+
 namespace App\Services;
 
 use App\Interfaces\PontoServiceInterface;
 use App\Interfaces\PontoRepositoryInterface;
 use Carbon\Carbon;
 use App\Models\Ponto;
+use App\Repositories\PontoRepository;
 use Carbon\CarbonPeriod;
 
 class PontoService implements PontoServiceInterface
 {
     protected $pontoRepository;
 
-    public function __construct(PontoRepositoryInterface $pontoRepository)
+    public function __construct(PontoRepository $pontoRepository)
     {
         $this->pontoRepository = $pontoRepository;
     }
@@ -19,7 +21,7 @@ class PontoService implements PontoServiceInterface
     public function registrar(array $data)
     {
         $data['user_id'] = auth()->user()->id;
-        $data['timestamp'] = Carbon::now(); 
+        $data['timestamp'] = Carbon::now();
         return $this->pontoRepository->registrarPonto($data);
     }
 
@@ -30,7 +32,7 @@ class PontoService implements PontoServiceInterface
     }
 
 
-   
+
     public function gerarRelatorio(int $userId, $mes, $ano)
     {
         $registros = $this->pontoRepository->gerarRelatorio($userId, $mes, $ano);
