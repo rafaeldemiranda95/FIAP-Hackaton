@@ -37,26 +37,22 @@ class PontoService implements PontoServiceInterface
 
     public function alterar($data, $id)
     {
-        $ponto = $this->pontoRepository->exibirPonto($id);
+        // $ponto = $this->pontoRepository->exibirPonto($id);
 
-        $carbonInstance = Carbon::parse($ponto['timestamp']);
+        // $carbonInstance = Carbon::parse($ponto['timestamp']);
 
-        $dia =  $carbonInstance->format('Y-m-d');
+        // $dia =  $carbonInstance->format('Y-m-d');
 
-        // Carbon::createFromFormat('Y-m-d', $dataBuscada)->startOfDay();
-        // Carbon::createFromFormat('Y-m-d', $dia)->startOfDay()
-        $dataCompare = ['user_id' => auth()->user()->id, 'dia' => Carbon::createFromFormat('Y-m-d', $dia)->startOfDay()];
+        // $dataCompare = ['user_id' => auth()->user()->id, 'dia' => Carbon::createFromFormat('Y-m-d', $dia)->startOfDay()];
 
         // return $dataCompare;
 
-        $verifica = $this->autorizaAlteracaoService->temAutorizacao($dataCompare);
-        // $dataFormat = $data['data'] . ' ' . $data['hora'];
-        // $data['timestamp'] = Carbon::createFromFormat('d-m-Y H:i', $dataFormat);
-        // $data['user_id'] = auth()->user()->id;
+        // $verifica = $this->autorizaAlteracaoService->temAutorizacao($dataCompare);
+        $dataFormat = $data['data'] . ' ' . $data['hora'];
+        $data['timestamp'] = Carbon::createFromFormat('d-m-Y H:i', $dataFormat);
+        $data['user_id'] = auth()->user()->id;
 
-        // $autorizado =  $this->autorizaAlteracaoService->temAutorizacao($id);
-        return $verifica;
-        // return $this->pontoRepository->alterarPonto($data, $id);
+        return $this->pontoRepository->alterarPonto($data, $id);
     }
 
     public function gerarRelatorio(int $userId, $mes, $ano)

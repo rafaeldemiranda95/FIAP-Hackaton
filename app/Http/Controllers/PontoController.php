@@ -90,7 +90,7 @@ class PontoController extends Controller
 
             // Resposta em caso de sucesso
             return response()->json([
-                'mensagem' => $ponto, // 'Registro alterado com sucesso',
+                'mensagem' => 'Registro alterado com sucesso',
             ], 200);
         } catch (\Exception $e) {
             // Resposta em caso de erro

@@ -22,10 +22,6 @@ class AutorizaAlteracaoRepository implements AutorizaAlteracaoRepositoryInterfac
     public function temAutorizacao($dataCompare)
     {
         $autorizacao =  AutorizaAlteracao::whereDate('dia', $dataCompare['dia'])->get();
-        return $autorizacao;
-        //whereDate('dia', $dataCompare['dia'])
-        // ->where('user_id', $dataCompare['user_id'])
-        // ->get();
         if ($autorizacao && $autorizacao->status === 'aprovado') {
             return true;
         } else if ($autorizacao && $autorizacao->status === 'reprovado') {
