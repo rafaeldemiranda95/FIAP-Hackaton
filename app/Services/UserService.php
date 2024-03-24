@@ -1,8 +1,10 @@
 <?php
+
 namespace App\Services;
 
 use App\Interfaces\UserServiceInterface;
 use App\Interfaces\UserRepositoryInterface;
+use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\Hash;
 
 class UserService implements UserServiceInterface
@@ -17,18 +19,18 @@ class UserService implements UserServiceInterface
     public function register(array $data)
     {
         $existingUser = $this->userRepository->findByEmail($data['email']);
-        
-        if ($existingUser) {
-            return ['error' => 'User already exists', 'status' => 409];
+
+        if (count($existingUser) > 0) {
+            return ['error' => 'User already exists: ', 'status' => 409];
         }
-    
+
         $data['password'] = Hash::make($data['password']);
         $user = $this->userRepository->create($data);
-        
+
         return ['user' => $user, 'status' => 201];
     }
-    
-    
+
+
     public function authenticate(array $credentials)
     {
         $user = $this->userRepository->findByUsername($credentials['username']);

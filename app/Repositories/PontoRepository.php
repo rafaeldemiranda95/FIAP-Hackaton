@@ -13,12 +13,25 @@ class PontoRepository implements PontoRepositoryInterface
         return Ponto::create($data);
     }
 
+    public function exibirPonto($id)
+    {
+        return Ponto::find($id);
+    }
+
+    public function alterarPonto(array $data, $id)
+    {
+        return Ponto::where("id", $id)->update([
+            'tipo' => $data['tipo'],
+            'timestamp' => $data['timestamp'],
+        ]);
+    }
+
     public function buscarRegistrosPorUsuarioEData(int $userId, $dataInicio, $dataFim)
     {
         return Ponto::where('user_id', $userId)
-                    ->whereDate('created_at', '>=', $dataInicio)
-                    ->whereDate('created_at', '<=', $dataFim)
-                    ->get();
+            ->whereDate('created_at', '>=', $dataInicio)
+            ->whereDate('created_at', '<=', $dataFim)
+            ->get();
     }
 
     public function gerarRelatorio(int $userId, $mes, $ano)
@@ -27,7 +40,7 @@ class PontoRepository implements PontoRepositoryInterface
         $fimMes = Carbon::create($ano, $mes, 1)->endOfMonth();
 
         return Ponto::where('user_id', $userId)
-                    ->whereBetween('timestamp', [$inicioMes, $fimMes])
-                    ->get();
+            ->whereBetween('timestamp', [$inicioMes, $fimMes])
+            ->get();
     }
 }

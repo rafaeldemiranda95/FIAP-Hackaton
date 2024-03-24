@@ -46,4 +46,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Ponto::class);
     }
+
+    public function autorizacoesAlteracao()
+    {
+        return $this->hasMany(AutorizaAlteracao::class);
+    }
 }
